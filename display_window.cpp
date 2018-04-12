@@ -2,7 +2,7 @@
 
 class DisplayWindow{
   private:
-    void Create(Coordinate window_position, int width, int height, char* title);
+    void Create(int argc, char *argv[], Coordinate window_position, int width, int height, char* title);
     void Setting();
     static void Display_Content();
 
@@ -11,22 +11,30 @@ class DisplayWindow{
 };
 
 DisplayWindow::DisplayWindow(int argc, char *argv[], Coordinate window_position, int width, int height, char* title){
-  glutInit(&argc, argv);//環境の初期化
-  Create(window_position, width, height, title);
+  Create(argc, argv, window_position, width, height, title);
   Setting();
   glutMainLoop();
 }
 
 void DisplayWindow::Display_Content(void) {
-  
+	glClear( GL_COLOR_BUFFER_BIT );
+
+	glColor3d( 1.0, 1.0, 1.0);
+  glLineWidth(50.0);
+	glBegin( GL_LINES );
+  	glVertex2d( -0.9, 0 );
+  	glVertex2d( 0.9, 0 );
+	glEnd();
+	glFlush();
 }
 
-void DisplayWindow::Create(Coordinate window_position, int width, int height, char* title){
+void DisplayWindow::Create(int argc, char *argv[], Coordinate window_position, int width, int height, char* title){
   glutInitWindowPosition(window_position.get_x(),window_position.get_y());//ウィンドウの位置の指定
   glutInitWindowSize(width,height); //ウィンドウサイズの指定
-  glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);//ディスプレイモードの指定
+  glutInit(&argc, argv);//環境の初期化
+  glutInitDisplayMode(GLUT_RGBA);//ディスプレイモードの指定
   glutCreateWindow(title);  //ウィンドウの作成
-  glClearColor(1.0, 1.0, 1.0, 1.0); //背景色
+  glClearColor(0.6, 0.8, 0.8, 1.0); //背景色
 }
 
 void DisplayWindow::Setting(){

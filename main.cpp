@@ -9,7 +9,7 @@ int WindowHeight = 512;    //生成するウィンドウの高さ
 char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
 //----------------------------------------------------
 // メイン関数
-//----------------------------------------------------
+
 int main(int argc, char *argv[]){
   DisplayWindow window(argc,argv,window_position,WindowWidth,WindowHeight,WindowTitle);
   return 0;
