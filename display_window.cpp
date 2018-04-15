@@ -1,35 +1,31 @@
 #include "coordinate.cpp"
+#include "road.cpp"
 
 class DisplayWindow{
   private:
-    void Create(int argc, char *argv[], Coordinate window_position, int width, int height, char* title);
+    void Create(int argc, char *argv[], Coordinate* window_position, int width, int height, char* title);
     void Setting();
     static void Display_Content();
 
   public:
-    DisplayWindow(int argc, char *argv[], Coordinate coordinate, int width, int height, char* title);
+    DisplayWindow(int argc, char *argv[], Coordinate* window_position, int width, int height, char* title);
 };
 
-DisplayWindow::DisplayWindow(int argc, char *argv[], Coordinate window_position, int width, int height, char* title){
+DisplayWindow::DisplayWindow(int argc, char *argv[], Coordinate* window_position, int width, int height, char* title){
   Create(argc, argv, window_position, width, height, title);
   Setting();
   glutMainLoop();
 }
 
 void DisplayWindow::Display_Content(void) {
-	glClear( GL_COLOR_BUFFER_BIT );
-
-	glColor3d( 1.0, 1.0, 1.0);
-  glLineWidth(50.0);
-	glBegin( GL_LINES );
-  	glVertex2d( -0.9, 0 );
-  	glVertex2d( 0.9, 0 );
-	glEnd();
-	glFlush();
+  Coordinate start_position(-1.0,0);
+  Coordinate end_position(1.0,0);
+  Road* main_road = new Road(50,&start_position,&end_position);
+  main_road->Create();
 }
 
-void DisplayWindow::Create(int argc, char *argv[], Coordinate window_position, int width, int height, char* title){
-  glutInitWindowPosition(window_position.get_x(),window_position.get_y());//ウィンドウの位置の指定
+void DisplayWindow::Create(int argc, char *argv[], Coordinate* window_position, int width, int height, char* title){
+  glutInitWindowPosition(window_position->get_x(),window_position->get_y());//ウィンドウの位置の指定
   glutInitWindowSize(width,height); //ウィンドウサイズの指定
   glutInit(&argc, argv);//環境の初期化
   glutInitDisplayMode(GLUT_RGBA);//ディスプレイモードの指定

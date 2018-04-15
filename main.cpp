@@ -7,10 +7,8 @@ Coordinate window_position(WindowPositionX,WindowPositionY);
 int WindowWidth = 512;    //生成するウィンドウの幅
 int WindowHeight = 512;    //生成するウィンドウの高さ
 char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
-//----------------------------------------------------
-// メイン関数
 
 int main(int argc, char *argv[]){
-  DisplayWindow window(argc,argv,window_position,WindowWidth,WindowHeight,WindowTitle);
+  DisplayWindow window(argc,argv,&window_position,WindowWidth,WindowHeight,WindowTitle);
   return 0;
 }
