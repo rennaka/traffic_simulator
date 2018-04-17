@@ -1,5 +1,7 @@
 #include "coordinate.cpp"
 #include "road.cpp"
+#include "speed.cpp"
+#include "car.cpp"
 
 class DisplayWindow{
   private:
@@ -22,6 +24,10 @@ void DisplayWindow::Display_Content(void) {
   Coordinate end_position(1.0,0);
   Road* main_road = new Road(50,&start_position,&end_position);
   main_road->Create();
+  Coordinate car1_start_position(0,0);
+  Speed car1_speed(0.1,0);
+  Car* car1 = new Car(&car1_start_position,&car1_speed);
+  car1->Run();
 }
 
 void DisplayWindow::Create(int argc, char *argv[], Coordinate* window_position, int width, int height, char* title){
@@ -37,5 +43,6 @@ void DisplayWindow::Setting(){
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //バッファの消去
   glutSwapBuffers(); //glutInitDisplayMode(GLUT_DOUBLE)でダブルバッファリングを利用可
   glEnable(GL_DEPTH_TEST);//デプスバッファを使用：glutInitDisplayMode() で GLUT_DEPTH を指定する
+  glClear( GL_COLOR_BUFFER_BIT );
   glutDisplayFunc(Display_Content); //描画時に呼び出される関数を指定する（関数名：Display）
 }

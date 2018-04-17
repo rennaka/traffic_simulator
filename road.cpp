@@ -13,7 +13,6 @@ Road::Road(double init_width, Coordinate* init_start_position, Coordinate* init_
 }
 
 void Road::Create(){
-  glClear( GL_COLOR_BUFFER_BIT );
 	glColor3d( 1.0, 1.0, 1.0);
   glLineWidth(width);
 	glBegin( GL_LINES );
