@@ -30,10 +30,9 @@ void DisplayWindow::Definition_Content(void) {
   Coordinate end_position(1.0,0);
   road = new Road(50,&start_position,&end_position);
   road->Create();
-  Coordinate car1_start_position(0,0);
+  Coordinate car1_start_position(0.9,0);
   Speed car1_speed(0.1,0);
   car1 = new Car(&car1_start_position,&car1_speed);
-  // car1->Run();
 }
 
 void DisplayWindow::Display_Content(void) {

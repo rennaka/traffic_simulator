@@ -4,7 +4,6 @@ class Coordinate{
     double y;
 
   public:
-    // Coordinate(){}
     Coordinate(double x, double y);
     double get_x(){ return x; }
     double get_y(){ return y; }
