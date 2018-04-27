@@ -1,7 +1,7 @@
 class Speed{
   private:
-    const double x;
-    const double y;
+    double x;
+    double y;
 
   public:
     Speed(double x, double y);

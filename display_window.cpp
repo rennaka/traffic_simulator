@@ -8,10 +8,16 @@ class DisplayWindow{
     void Create(int argc, char *argv[], Coordinate* window_position, int width, int height, char* title);
     void Setting();
     static void Display_Content();
+    static void Definition_Content();
+    static Road* road;
+    static Car* car1;
 
   public:
     DisplayWindow(int argc, char *argv[], Coordinate* window_position, int width, int height, char* title);
 };
+
+Road* DisplayWindow::road;
+Car* DisplayWindow::car1;
 
 DisplayWindow::DisplayWindow(int argc, char *argv[], Coordinate* window_position, int width, int height, char* title){
   Create(argc, argv, window_position, width, height, title);
@@ -19,14 +25,18 @@ DisplayWindow::DisplayWindow(int argc, char *argv[], Coordinate* window_position
   glutMainLoop();
 }
 
-void DisplayWindow::Display_Content(void) {
+void DisplayWindow::Definition_Content(void) {
   Coordinate start_position(-1.0,0);
   Coordinate end_position(1.0,0);
-  Road* main_road = new Road(50,&start_position,&end_position);
-  main_road->Create();
+  road = new Road(50,&start_position,&end_position);
+  road->Create();
   Coordinate car1_start_position(0,0);
   Speed car1_speed(0.1,0);
-  Car* car1 = new Car(&car1_start_position,&car1_speed);
+  car1 = new Car(&car1_start_position,&car1_speed);
+  // car1->Run();
+}
+
+void DisplayWindow::Display_Content(void) {
   car1->Run();
 }
 
@@ -44,5 +54,6 @@ void DisplayWindow::Setting(){
   glutSwapBuffers(); //glutInitDisplayMode(GLUT_DOUBLE)でダブルバッファリングを利用可
   glEnable(GL_DEPTH_TEST);//デプスバッファを使用：glutInitDisplayMode() で GLUT_DEPTH を指定する
   glClear( GL_COLOR_BUFFER_BIT );
-  glutDisplayFunc(Display_Content); //描画時に呼び出される関数を指定する（関数名：Display）
+  glutDisplayFunc(Definition_Content); //描画時に呼び出される関数を指定する（関数名：Display）
+  glutIdleFunc(Display_Content);
 }
