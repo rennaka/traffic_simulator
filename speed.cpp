@@ -9,7 +9,10 @@ class Speed{
     float get_y(){ return y; }
     void set_x(float new_x){ x = new_x; }
     void set_y(float new_y){ y = new_y; }
+    static Speed DEFAULT;
 };
+
+Speed Speed::DEFAULT(-0.003,0);
 
 Speed::Speed(float init_x, float init_y) : x(init_x), y(init_y)
 {

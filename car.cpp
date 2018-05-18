@@ -6,13 +6,14 @@ class Car{
     void draw_car_poligon();
     void hide();
   public:
-    Car(Coordinate* init_position, Speed* init_speed);
+    Car(Coordinate* init_position);
     ~Car();
     void Run();
 };
 
-Car::Car(Coordinate* init_position, Speed* init_speed) : position(init_position), speed(init_speed)
+Car::Car(Coordinate* init_position) : position(init_position)
 {
+  speed = &(Speed::DEFAULT);
   Car::display();
 }
 
@@ -21,7 +22,7 @@ Car::~Car(){
 
 void Car::Run(){
   hide();
-  position->set_x(position->get_x() + -0.002);
+  position->set_x(position->get_x() + speed->get_x());
   position->set_y(position->get_y() + speed->get_y());
   display();
 }

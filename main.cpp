@@ -21,15 +21,9 @@ void Definition_Content(void) {
   void Display_Content(void) {
     if (!car1) {
       Coordinate car1_start_position(1.0,0);
-      Speed car1_speed(-0.003,0);
-      car1 = new Car(&car1_start_position,&car1_speed);
+      car1 = new Car(&car1_start_position);
     }
     car1->Run();
-  }
-
-  void timer(int value) {
-    glutPostRedisplay();
-    glutTimerFunc(100, timer, 0);
   }
 
 int main(int argc, char *argv[]){
