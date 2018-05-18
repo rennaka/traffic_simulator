@@ -17,6 +17,7 @@ Car::Car(Coordinate* init_position, Speed* init_speed) : position(init_position)
 }
 
 Car::~Car(){
+
 }
 
 void Car::Run(){

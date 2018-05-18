@@ -1,15 +1,17 @@
 #include <GL/glut.h>
+#include <vector>       // ヘッダファイルインクルード
 #include "coordinate.cpp"
 #include "road.cpp"
 #include "speed.cpp"
 #include "car.cpp"
+using namespace std;
 
 Coordinate window_position(100,100);
 int WindowWidth = 512;    //生成するウィンドウの幅
 int WindowHeight = 512;    //生成するウィンドウの高さ
 char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
 static Road* road;
-static Car* car1;
+static vector<Car*> cars;
 
 void Definition_Content(void) {
   Coordinate start_position(-1.0,0);
@@ -19,12 +21,14 @@ void Definition_Content(void) {
 }
 
   void Display_Content(void) {
-    if (!car1) {
+    if (cars.empty()) {
       Coordinate car1_start_position(1.0,0);
-      Speed car1_speed(-0.003,0);
-      car1 = new Car(&car1_start_position,&car1_speed);
+      Speed car1_start_speed(-0.003,0);
+      cars.push_back(new Car(&car1_start_position,&car1_start_speed));
     }
-    car1->Run();
+    for(Car* car : cars) {
+      car->Run();
+    }
   }
 
   void timer(int value) {
