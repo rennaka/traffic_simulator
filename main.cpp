@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include <fstream>
 #include <vector>       // ヘッダファイルインクルード
 #include "coordinate.cpp"
 #include "road.cpp"
@@ -10,31 +11,36 @@ Coordinate window_position(100,100);
 int WindowWidth = 512;    //生成するウィンドウの幅
 int WindowHeight = 512;    //生成するウィンドウの高さ
 char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
-static vector<Road*> roads;
 static vector<Car*> cars;
 
-void Definition_Content(void) {
-  // Coordinate start_position(-1.0,0);
-  // Coordinate end_position(1.0,0);
-  // for(int i = 0; i < roas.size(); i++) {
-  //   roads[i]->Run();
-  // }
+void Definition_Road(){
   Road(50, new Coordinate(-1.0,0), new Coordinate(1.0,0));
-  // roads.push_back(new Road(50,new Coordinate(-1.0,0),new Coordinate(1.0,0)));
-  // road->Create();
-  cars.push_back(new Car(new Coordinate(1.0,0.02), new Speed(-0.003,0),'S'));
-  cars.push_back(new Car(new Coordinate(-1.0,-0.02), new Speed(0.004,0),'L'));
+  Road(50, new Coordinate(0,-1.0), new Coordinate(0,1.0));
+}
+
+void Definition_Cars(){
+  ifstream ifs("car_data.txt");
+  string str;
+  if(ifs.fail()) {
+		exit(0);
+	}
+  while(getline(ifs, str)) {
+    float start_position_x,start_position_y,start_speed_x,start_speed_y;
+    char direction;
+		sscanf(str.data(), "%f,%f,%f,%f,%c", &start_position_x, &start_position_y, &start_speed_x, &start_speed_y, &direction);
+    cars.push_back(new Car(new Coordinate(start_position_x,start_position_y), new Speed(start_speed_x,start_speed_y),direction));
+	}
+}
+
+void Definition_Content(void) {
+  Definition_Road();
+  Definition_Cars();
 }
 
 void Display_Content(void) {
   for(int i = 0; i < cars.size(); i++) {
     cars[i]->Run();
   }
-}
-
-void timer(int value) {
-  glutPostRedisplay();
-  glutTimerFunc(100, timer, 0);
 }
 
 int main(int argc, char *argv[]){
@@ -53,3 +59,8 @@ int main(int argc, char *argv[]){
   glutMainLoop();
   return 0;
 }
+
+// void timer(int value) {
+//   glutPostRedisplay();
+//   glutTimerFunc(100, timer, 0);
+// }
