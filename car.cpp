@@ -2,16 +2,18 @@ class Car{
   private:
     Coordinate* position;
     Speed* speed;
+    char direction;
     void display();
     void draw_car_poligon();
     void hide();
+    void accelate();
   public:
-    Car(Coordinate* init_position, Speed* init_speed);
+    Car(Coordinate* init_position, Speed* init_speed, char init_direction);
     ~Car();
     void Run();
 };
 
-Car::Car(Coordinate* init_position, Speed* init_speed) : position(init_position), speed(init_speed)
+Car::Car(Coordinate* init_position, Speed* init_speed, char init_direction) : position(init_position), speed(init_speed), direction(init_direction)
 {
   Car::display();
 }
@@ -22,13 +24,18 @@ Car::~Car(){
 
 void Car::Run(){
   hide();
-  position->set_x(position->get_x() + -0.002);
+  // accelate();
+  position->set_x(position->get_x() + speed->get_x());
   position->set_y(position->get_y() + speed->get_y());
   display();
 }
 
+void Car::accelate(){
+  speed->set_x(speed->get_x() + 0.0001);
+}
+
 void Car::display(){
-  glColor3d( 1.0, 0.0, 0.0);
+  glColor3d( 0.0, 0.0, 0.0);
   draw_car_poligon();
   glutSwapBuffers();
 }

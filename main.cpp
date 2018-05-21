@@ -10,31 +10,32 @@ Coordinate window_position(100,100);
 int WindowWidth = 512;    //生成するウィンドウの幅
 int WindowHeight = 512;    //生成するウィンドウの高さ
 char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
-static Road* road;
+static vector<Road*> roads;
 static vector<Car*> cars;
 
 void Definition_Content(void) {
-  Coordinate start_position(-1.0,0);
-  Coordinate end_position(1.0,0);
-  road = new Road(50,&start_position,&end_position);
-  road->Create();
+  // Coordinate start_position(-1.0,0);
+  // Coordinate end_position(1.0,0);
+  // for(int i = 0; i < roas.size(); i++) {
+  //   roads[i]->Run();
+  // }
+  Road(50, new Coordinate(-1.0,0), new Coordinate(1.0,0));
+  // roads.push_back(new Road(50,new Coordinate(-1.0,0),new Coordinate(1.0,0)));
+  // road->Create();
+  cars.push_back(new Car(new Coordinate(1.0,0.02), new Speed(-0.003,0),'S'));
+  cars.push_back(new Car(new Coordinate(-1.0,-0.02), new Speed(0.004,0),'L'));
 }
 
-  void Display_Content(void) {
-    if (cars.empty()) {
-      Coordinate car1_start_position(1.0,0);
-      Speed car1_start_speed(-0.003,0);
-      cars.push_back(new Car(&car1_start_position,&car1_start_speed));
-    }
-    for(Car* car : cars) {
-      car->Run();
-    }
+void Display_Content(void) {
+  for(int i = 0; i < cars.size(); i++) {
+    cars[i]->Run();
   }
+}
 
-  void timer(int value) {
-    glutPostRedisplay();
-    glutTimerFunc(100, timer, 0);
-  }
+void timer(int value) {
+  glutPostRedisplay();
+  glutTimerFunc(100, timer, 0);
+}
 
 int main(int argc, char *argv[]){
   glutInitWindowPosition(window_position.get_x(),window_position.get_y());//ウィンドウの位置の指定
