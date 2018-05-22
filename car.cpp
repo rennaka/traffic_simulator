@@ -35,19 +35,12 @@ void Car::accelate(){
 }
 
 void Car::display(){
-  glColor3d( 0.0, 0.0, 0.0);
-  draw_car_poligon();
+  Set_Color::car();
+  Draw::car(position);
   glutSwapBuffers();
 }
 
 void Car::hide(){
-  glColor3d( 1.0, 1.0, 1.0);
-  draw_car_poligon();
-}
-
-void Car::draw_car_poligon(){
-  glPointSize(5);
-  glBegin(GL_POINTS);
-    glVertex2d(position->get_x() , position->get_y());
-  glEnd();
+  Set_Color::road();
+  Draw::car(position);
 }
