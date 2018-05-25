@@ -12,10 +12,11 @@ void Draw::car(Coordinate* position){
 }
 
 void Draw::road(float width, Coordinate* start_position, Coordinate* end_position){
+  GLfloat lineWidthRange[2] = {0.0f, 10000.0f};
+  glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, lineWidthRange);
   glLineWidth(width);
   glBegin( GL_LINES );
     glVertex2d(start_position->get_x(),start_position->get_y());
     glVertex2d(end_position->get_x(),end_position->get_y());
   glEnd();
-  glutSwapBuffers();
 }

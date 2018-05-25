@@ -1,19 +1,21 @@
 class Car{
   private:
+    int id;
     Coordinate* position;
     Speed* speed;
+    float vehicular_gap;
     char direction;
     void display();
     void draw_car_poligon();
     void hide();
     void accelate();
   public:
-    Car(Coordinate* init_position, Speed* init_speed, char init_direction);
+    Car(int init_id, Coordinate* init_position, Speed* init_speed, char init_direction);
     ~Car();
     void Run();
 };
 
-Car::Car(Coordinate* init_position, Speed* init_speed, char init_direction) : position(init_position), speed(init_speed), direction(init_direction)
+Car::Car(int init_id, Coordinate* init_position, Speed* init_speed, char init_direction) : id(init_id), position(init_position), speed(init_speed), direction(init_direction)
 {
   Car::display();
 }
@@ -37,7 +39,6 @@ void Car::accelate(){
 void Car::display(){
   Set_Color::car();
   Draw::car(position);
-  glutSwapBuffers();
 }
 
 void Car::hide(){

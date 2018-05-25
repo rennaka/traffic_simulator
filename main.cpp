@@ -10,14 +10,14 @@
 using namespace std;
 
 Coordinate window_position(100,100);
-int WindowWidth = 512;    //生成するウィンドウの幅
-int WindowHeight = 512;    //生成するウィンドウの高さ
+int WindowWidth = 1024;    //生成するウィンドウの幅
+int WindowHeight = 1024;    //生成するウィンドウの高さ
 char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
 static vector<Car*> cars;
 
 void Definition_Road(){
-  Road(50, new Coordinate(-1.0,0), new Coordinate(1.0,0));
-  Road(50, new Coordinate(0,-1.0), new Coordinate(0,1.0));
+  Road(300, new Coordinate(-1.0,0), new Coordinate(1.0,0));
+  Road(5, new Coordinate(0,-1.0), new Coordinate(0,1.0));
 }
 
 void Definition_Cars(){
@@ -27,22 +27,25 @@ void Definition_Cars(){
 		exit(0);
 	}
   while(getline(ifs, str)) {
+    int id;
     float start_position_x,start_position_y,start_speed_x,start_speed_y;
     char direction;
-		sscanf(str.data(), "%f,%f,%f,%f,%c", &start_position_x, &start_position_y, &start_speed_x, &start_speed_y, &direction);
-    cars.push_back(new Car(new Coordinate(start_position_x,start_position_y), new Speed(start_speed_x,start_speed_y),direction));
+		sscanf(str.data(), "%i,%f,%f,%f,%f,%c",&id, &start_position_x, &start_position_y, &start_speed_x, &start_speed_y, &direction);
+    cars.push_back(new Car(id, new Coordinate(start_position_x,start_position_y), new Speed(start_speed_x,start_speed_y),direction));
 	}
 }
 
 void Definition_Content(void) {
   Definition_Road();
   Definition_Cars();
+  glutSwapBuffers();
 }
 
 void Display_Content(void) {
   for(int i = 0; i < cars.size(); i++) {
     cars[i]->Run();
   }
+  glutSwapBuffers();
 }
 
 int main(int argc, char *argv[]){
