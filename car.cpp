@@ -36,10 +36,10 @@ Car::~Car(){
 }
 
 void Car::set_vehicular_gap(){
-  vehicular_gap = pow(10, 8);
+  vehicular_gap = pow(10, 3);
   for(int i = 0; i < cars.size(); i++) {
     if (is_former_car(cars[i])) {
-      vehicular_gap = min(vehicular_gap, Coordinate::distance(cars[i]->position, this->position));
+      vehicular_gap = min(vehicular_gap, Coordinate::distance(cars[i]->position, this->position) * Const::scale);
     }
   }
 }
@@ -69,22 +69,19 @@ void Car::Run(){
 }
 
 void Car::accelate(){
+  velocity->set_speed(velocity->get_speed() + (Const::sensitivity * (Const::max_speed / 2 * (tanh(vehicular_gap - Const::safety_distance) + tanh(Const::safety_distance)) - velocity->get_speed() * Const::scale)) / Const::scale);
   switch(this->velocity->get_direction()){
     case 'E':
       position->set_x(position->get_x() + velocity->get_speed() * Const::dt);
-      velocity->set_speed(velocity->get_speed() + Const::sensitivity * (Const::max_speed * (tanh(vehicular_gap - Const::c) + tanh(Const::c)) - velocity->get_speed()));
       break;
     case 'W':
       position->set_x(position->get_x() - velocity->get_speed() * Const::dt);
-      velocity->set_speed(velocity->get_speed() + Const::sensitivity * (Const::max_speed * (tanh(vehicular_gap - Const::c) + tanh(Const::c)) - velocity->get_speed()));
       break;
     case 'N':
       position->set_y(position->get_y() + velocity->get_speed() * Const::dt);
-      velocity->set_speed(velocity->get_speed() + Const::sensitivity * (Const::max_speed * (tanh(vehicular_gap - Const::c) + tanh(Const::c)) - velocity->get_speed()));
       break;
     case 'S':
       position->set_y(position->get_y() - velocity->get_speed() * Const::dt);
-      velocity->set_speed(velocity->get_speed() + Const::sensitivity * (Const::max_speed * (tanh(vehicular_gap - Const::c) + tanh(Const::c)) - velocity->get_speed()));
       break;
   }
 }

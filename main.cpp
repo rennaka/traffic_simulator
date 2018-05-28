@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 #include <fstream>
+#include <iostream>
 #include <vector>       // ヘッダファイルインクルード
 #include <math.h>
 #include "const.cpp"
@@ -20,6 +21,7 @@ vector<Car*> direction_W_cars;
 vector<Car*> direction_N_cars;
 vector<Car*> direction_S_cars;
 vector<Car*> cars;
+int count = 0;
 /*
   座標1が1km相当、最高速度は54km/h = 15m/s つまりコード上では0.015で表現
 */
@@ -39,7 +41,7 @@ void Definition_Cars(){
     float start_position_x,start_position_y,start_speed;
     char direction;
 		sscanf(str.data(), "%i,%f,%f,%f,%c",&id, &start_position_x, &start_position_y, &start_speed, &direction);
-    cars.push_back(new Car(id, new Coordinate(start_position_x,start_position_y), new Velocity(start_speed, direction)));
+    cars.push_back(new Car(id, new Coordinate(start_position_x,start_position_y), new Velocity(start_speed / Const::scale, direction)));
 	}
 }
 
@@ -54,6 +56,8 @@ void Display_Content(void) {
     extern vector<Car*> cars;
     cars[i]->Run();
   }
+  count++;
+  std::cout << count <<std::endl;
   glutSwapBuffers();
 }
 

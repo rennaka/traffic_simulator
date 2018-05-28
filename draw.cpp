@@ -5,7 +5,7 @@ class Draw{
 };
 
 void Draw::car(Coordinate* position){
-  glPointSize(5);
+  glPointSize(3);
   glBegin(GL_POINTS);
     glVertex2d(position->get_x() , position->get_y());
   glEnd();
