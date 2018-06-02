@@ -3,10 +3,10 @@ class Road{
     float width;
     Coordinate* start_position;
     Coordinate* end_position;
+    void Create();
   public:
     Road(float width, Coordinate* start_position, Coordinate* end_position);
     ~Road();
-    void Create();
 };
 
 Road::Road(float init_width, Coordinate* init_start_position, Coordinate* init_end_position) : width(init_width), start_position(init_start_position), end_position(init_end_position)

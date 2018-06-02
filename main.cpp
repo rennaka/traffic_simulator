@@ -10,17 +10,16 @@
 #include "road.cpp"
 #include "velocity.cpp"
 #include "car.cpp"
+#include "signal.cpp"
 using namespace std;
 
 Coordinate window_position(100,100);
 int WindowWidth = 1024;    //生成するウィンドウの幅
 int WindowHeight = 1024;    //生成するウィンドウの高さ
 char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
-vector<Car*> direction_E_cars;
-vector<Car*> direction_W_cars;
-vector<Car*> direction_N_cars;
-vector<Car*> direction_S_cars;
 vector<Car*> cars;
+Signal* traffic_signal;
+// vector<Signal*> traffic_signals;
 int count = 0;
 /*
   座標1が1km相当、最高速度は54km/h = 15m/s つまりコード上では0.015で表現
@@ -28,6 +27,11 @@ int count = 0;
 void Definition_Road(){
   Road(50, new Coordinate(-1.0,0), new Coordinate(1.0,0));
   Road(50, new Coordinate(0,-1.0), new Coordinate(0,1.0));
+}
+
+void Definition_Signal(){
+  // traffic_signals.push_back(new Signal(90,40,40,2,3,new Coordinate(0,0),0.1,0.1));
+  traffic_signal = new Signal(90,40,40,2,3,new Coordinate(0,0),0.1,0.1);
 }
 
 void Definition_Cars(){
@@ -47,15 +51,30 @@ void Definition_Cars(){
 
 void Definition_Content(void) {
   Definition_Road();
+  Definition_Signal();
   Definition_Cars();
   glutSwapBuffers();
 }
 
-void Display_Content(void) {
+void Run_Car(){
   for(int i = 0; i < cars.size(); i++) {
     extern vector<Car*> cars;
     cars[i]->Run();
   }
+}
+
+// void Change_signals(){
+//   for(int i = 0; i < traffic_signals.size(); i++) {
+//     extern vector<Signal*> traffic_signals;
+//     traffic_signals[i]->Change(count * Const::dt);
+//   }
+// }
+
+void Display_Content(void) {
+  Run_Car();
+  extern Signal* traffic_signal;
+  traffic_signal->Change(count * Const::dt);
+  // Change_signals();
   count++;
   std::cout << count <<std::endl;
   glutSwapBuffers();

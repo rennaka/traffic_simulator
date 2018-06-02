@@ -12,7 +12,7 @@ class Car{
     void hide();
     void accelate();
     void set_vehicular_gap();
-    bool is_former_car(Car* car);
+    bool exist_former_car(Car* car);
     bool is_former_position(Car* car);
   public:
     Car(int init_id, Coordinate* init_position, Velocity* init_velocity);
@@ -20,11 +20,7 @@ class Car{
     void Run();
 };
 
-extern vector<Car*> direction_E_cars;
-extern vector<Car*> direction_W_cars;
-extern vector<Car*> direction_N_cars;
-extern vector<Car*> direction_S_cars;
-extern vector<Car*> cars;
+extern std::vector<Car*> cars;
 
 Car::Car(int init_id, Coordinate* init_position, Velocity* init_velocity) : id(init_id), position(init_position), velocity(init_velocity)
 {
@@ -38,13 +34,13 @@ Car::~Car(){
 void Car::set_vehicular_gap(){
   vehicular_gap = pow(10, 3);
   for(int i = 0; i < cars.size(); i++) {
-    if (is_former_car(cars[i])) {
+    if (exist_former_car(cars[i])) {
       vehicular_gap = min(vehicular_gap, Coordinate::distance(cars[i]->position, this->position) * Const::scale);
     }
   }
 }
 
-bool Car::is_former_car(Car* car){
+bool Car::exist_former_car(Car* car){
   return this->velocity->get_direction() == car->velocity->get_direction() && is_former_position(car);
 }
 

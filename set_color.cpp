@@ -3,6 +3,9 @@ class Set_Color{
     static void background();
     static void road();
     static void car();
+    static void green_signal();
+    static void yellow_signal();
+    static void red_signal();
 };
 
 void Set_Color::background(){
@@ -15,4 +18,16 @@ void Set_Color::road(){
 
 void Set_Color::car(){
   glColor3d( 0.0, 0.0, 0.0);
+}
+
+void Set_Color::green_signal(){
+  glColor3d( 0.0, 1.0, 1.0);
+}
+
+void Set_Color::yellow_signal(){
+  glColor3d( 0.0, 0.0, 1.0);
+}
+
+void Set_Color::red_signal(){
+  glColor3d( 1.0, 0.0, 0.0);
 }
