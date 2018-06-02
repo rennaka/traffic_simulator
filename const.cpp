@@ -1,12 +1,4 @@
-class Const{
-  public:
-    const static float dt;
-    const static float sensitivity;
-    const static float max_speed;
-    const static float safety_distance;
-    const static float scale;
-
-};
+#include "const.h"
 
 const float Const::dt = 0.1; // ステっプ時間[s]
 const float Const::sensitivity = 1.5; // 運転手の感度(パラメータ定数)

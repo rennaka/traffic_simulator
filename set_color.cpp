@@ -1,12 +1,4 @@
-class Set_Color{
-  public:
-    static void background();
-    static void road();
-    static void car();
-    static void green_signal();
-    static void yellow_signal();
-    static void red_signal();
-};
+#include "set_color.h"
 
 void Set_Color::background(){
   glClearColor(0.6, 0.8, 0.8, 1.0); //背景色

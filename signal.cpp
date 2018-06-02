@@ -1,20 +1,4 @@
-class Signal{
-  private:
-    float cycle_length;
-    float EW_green_length;
-    float NS_green_length;
-    float yellow_length;
-    float all_red_length;
-    Coordinate* position;
-    float EW_line_distance;
-    float NS_line_distance;
-  public:
-    Signal(float cycle_length, float EW_green_length, float NS_green_length, float yellow_length, float all_red_length, Coordinate* position, float EW_line_distance, float NS_line_distance);
-    ~Signal();
-    void Change(float elapsed_time);
-    void set_EW_color(float elapsed_time);
-    void set_NS_color(float elapsed_time);
-};
+#include "signal.h"
 
 Signal::Signal(float init_cycle_length, float init_EW_green_length, float init_NS_green_length, float init_yellow_length, float init_all_red_length, Coordinate* init_position, float init_EW_line_distance, float init_NS_line_distance)
 : cycle_length(init_cycle_length), EW_green_length(init_EW_green_length), NS_green_length(init_NS_green_length), yellow_length(init_yellow_length), all_red_length(init_all_red_length), position(init_position), EW_line_distance(init_EW_line_distance), NS_line_distance(init_NS_line_distance)

@@ -1,26 +1,8 @@
+#include "car.h"
 #include <vector>       // ヘッダファイルインクルード
 using namespace std;
 
-class Car{
-  private:
-    int id;
-    Coordinate* position;
-    Velocity* velocity;
-    float vehicular_gap;
-    void display();
-    void draw_car_poligon();
-    void hide();
-    void accelate();
-    void set_vehicular_gap();
-    bool exist_former_car(Car* car);
-    bool is_former_position(Car* car);
-  public:
-    Car(int init_id, Coordinate* init_position, Velocity* init_velocity);
-    ~Car();
-    void Run();
-};
-
-extern std::vector<Car*> cars;
+extern vector<Car*> cars;
 
 Car::Car(int init_id, Coordinate* init_position, Velocity* init_velocity) : id(init_id), position(init_position), velocity(init_velocity)
 {
