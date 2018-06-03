@@ -3,6 +3,7 @@
 using namespace std;
 
 extern vector<Car*> cars;
+extern TrafficSignal* traffic_signal;
 
 Car::Car(int init_id, Coordinate* init_position, Velocity* init_velocity) : id(init_id), position(init_position), velocity(init_velocity)
 {
@@ -17,8 +18,33 @@ void Car::set_vehicular_gap(){
   vehicular_gap = pow(10, 3);
   for(int i = 0; i < cars.size(); i++) {
     if (exist_former_car(cars[i])) {
-      vehicular_gap = min(vehicular_gap, Coordinate::distance(cars[i]->position, this->position) * Const::scale);
+      vehicular_gap = min(vehicular_gap, min(Coordinate::distance(cars[i]->position, this->position) * Const::scale, to_line_distance()));
     }
+  }
+}
+
+float Car::to_line_distance(){
+  switch(velocity->get_direction()){
+  case 'E':
+    if (traffic_signal->get_EW_color() == 'R') {
+      return Coordinate::distance(position, traffic_signal->E_line_position) * Const::scale;
+    }
+    return pow(10, 3);
+  case 'W':
+    if (traffic_signal->get_EW_color() == 'R') {
+      return Coordinate::distance(position, traffic_signal->W_line_position) * Const::scale;
+    }
+    return pow(10, 3);
+  case 'N':
+    if (traffic_signal->get_NS_color() == 'R') {
+      return Coordinate::distance(position, traffic_signal->N_line_position) * Const::scale;
+    }
+    return pow(10, 3);
+  case 'S':
+    if (traffic_signal->get_NS_color() == 'R') {
+      return Coordinate::distance(position, traffic_signal->S_line_position) * Const::scale;
+    }
+    return pow(10, 3);
   }
 }
 
@@ -27,15 +53,15 @@ bool Car::exist_former_car(Car* car){
 }
 
 bool Car::is_former_position(Car* car){
-  switch(this->velocity->get_direction()){
-    case 'E':
-      return this->position->get_x() < car->position->get_x();
-    case 'W':
-      return this->position->get_x() > car->position->get_x();
-    case 'N':
-      return this->position->get_y() < car->position->get_y();
-    case 'S':
-      return this->position->get_y() > car->position->get_y();
+  switch(velocity->get_direction()){
+  case 'E':
+    return this->position->get_x() < car->position->get_x();
+  case 'W':
+    return this->position->get_x() > car->position->get_x();
+  case 'N':
+    return this->position->get_y() < car->position->get_y();
+  case 'S':
+    return this->position->get_y() > car->position->get_y();
   }
 }
 
@@ -49,18 +75,18 @@ void Car::Run(){
 void Car::accelate(){
   velocity->set_speed(velocity->get_speed() + (Const::sensitivity * (Const::max_speed / 2 * (tanh(vehicular_gap - Const::safety_distance) + tanh(Const::safety_distance)) - velocity->get_speed() * Const::scale)) / Const::scale);
   switch(this->velocity->get_direction()){
-    case 'E':
-      position->set_x(position->get_x() + velocity->get_speed() * Const::dt);
-      break;
-    case 'W':
-      position->set_x(position->get_x() - velocity->get_speed() * Const::dt);
-      break;
-    case 'N':
-      position->set_y(position->get_y() + velocity->get_speed() * Const::dt);
-      break;
-    case 'S':
-      position->set_y(position->get_y() - velocity->get_speed() * Const::dt);
-      break;
+  case 'E':
+    position->set_x(position->get_x() + velocity->get_speed() * Const::dt);
+    break;
+  case 'W':
+    position->set_x(position->get_x() - velocity->get_speed() * Const::dt);
+    break;
+  case 'N':
+    position->set_y(position->get_y() + velocity->get_speed() * Const::dt);
+    break;
+  case 'S':
+    position->set_y(position->get_y() - velocity->get_speed() * Const::dt);
+    break;
   }
 }
 

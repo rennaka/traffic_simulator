@@ -18,24 +18,20 @@ int WindowHeight = 1024;    //生成するウィンドウの高さ
 char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
 vector<Car*> cars;
 TrafficSignal* traffic_signal;
-// vector<TrafficSignal*> traffic_signals;
 int count = 0;
-/*
-  座標1が1km相当、最高速度は54km/h = 15m/s つまりコード上では0.015で表現
-*/
+
 void Definition_Road(){
   Road(50, new Coordinate(-1.0,0), new Coordinate(1.0,0));
   Road(50, new Coordinate(0,-1.0), new Coordinate(0,1.0));
 }
 
 void Definition_Signal(){
-  // traffic_signals.push_back(new TrafficSignal(90,40,40,2,3,new Coordinate(0,0),0.1,0.1));
   extern TrafficSignal* traffic_signal;
-  traffic_signal = new TrafficSignal(90,40,40,2,3,new Coordinate(0,0),0.1,0.1);
+  traffic_signal = new TrafficSignal(40,15,15,2,3,new Coordinate(0,0),0.1,0.1);
 }
 
 void Definition_Cars(){
-  ifstream ifs("car_data.txt");
+  ifstream ifs("car_data.csv");
   string str;
   if(ifs.fail()) {
 		exit(0);
@@ -63,18 +59,10 @@ void Run_Car(){
   }
 }
 
-// void Change_signals(){
-//   for(int i = 0; i < traffic_signals.size(); i++) {
-//     extern vector<TrafficSignal*> traffic_signals;
-//     traffic_signals[i]->Change(count * Const::dt);
-//   }
-// }
-
 void Display_Content(void) {
   Run_Car();
   extern TrafficSignal* traffic_signal;
   traffic_signal->Change(count * Const::dt);
-  // Change_signals();
   count++;
   std::cout << count <<std::endl;
   glutSwapBuffers();
@@ -96,8 +84,3 @@ int main(int argc, char *argv[]){
   glutMainLoop();
   return 0;
 }
-
-// void timer(int value) {
-//   glutPostRedisplay();
-//   glutTimerFunc(100, timer, 0);
-// }

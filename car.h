@@ -12,6 +12,7 @@ class Car{
     bool exist_former_car(Car* car);
     bool is_former_position(Car* car);
     void draw_car();
+    float to_line_distance();
   public:
     Car(int init_id, Coordinate* init_position, Velocity* init_velocity);
     ~Car();
