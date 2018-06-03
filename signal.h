@@ -1,4 +1,4 @@
-class Signal{
+class TrafficSignal{
   private:
     float cycle_length;
     float EW_green_length;
@@ -8,10 +8,10 @@ class Signal{
     Coordinate* position;
     float EW_line_distance;
     float NS_line_distance;
+    void set_EW_color(float time_in_loop);
+    void set_NS_color(float time_in_loop);
   public:
-    Signal(float cycle_length, float EW_green_length, float NS_green_length, float yellow_length, float all_red_length, Coordinate* position, float EW_line_distance, float NS_line_distance);
-    ~Signal();
+    TrafficSignal(float cycle_length, float EW_green_length, float NS_green_length, float yellow_length, float all_red_length, Coordinate* position, float EW_line_distance, float NS_line_distance);
+    ~TrafficSignal();
     void Change(float elapsed_time);
-    void set_EW_color(float elapsed_time);
-    void set_NS_color(float elapsed_time);
 };

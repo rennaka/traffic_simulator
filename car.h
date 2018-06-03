@@ -11,6 +11,7 @@ class Car{
     void set_vehicular_gap();
     bool exist_former_car(Car* car);
     bool is_former_position(Car* car);
+    void draw_car();
   public:
     Car(int init_id, Coordinate* init_position, Velocity* init_velocity);
     ~Car();

@@ -66,10 +66,17 @@ void Car::accelate(){
 
 void Car::display(){
   Set_Color::car();
-  Draw::car(position);
+  draw_car();
 }
 
 void Car::hide(){
   Set_Color::road();
-  Draw::car(position);
+  draw_car();
+}
+
+void Car::draw_car(){
+  glPointSize(3);
+  glBegin(GL_POINTS);
+    glVertex2d(position->get_x() , position->get_y());
+  glEnd();
 }

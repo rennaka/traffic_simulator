@@ -17,7 +17,7 @@ void Set_Color::green_signal(){
 }
 
 void Set_Color::yellow_signal(){
-  glColor3d( 0.0, 0.0, 1.0);
+  glColor3d( 1.0, 1.0, 0.0);
 }
 
 void Set_Color::red_signal(){

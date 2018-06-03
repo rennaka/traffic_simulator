@@ -12,5 +12,15 @@ Road::~Road(){
 
 void Road::Create(){
   Set_Color::road();
-  Draw::road(width, start_position, end_position);
+  draw_road();
+}
+
+void Road::draw_road(){
+  GLfloat lineWidthRange[2] = {0.0f, 10000.0f};
+  glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, lineWidthRange);
+  glLineWidth(width);
+  glBegin( GL_LINES );
+    glVertex2d(start_position->get_x(),start_position->get_y());
+    glVertex2d(end_position->get_x(),end_position->get_y());
+  glEnd();
 }
