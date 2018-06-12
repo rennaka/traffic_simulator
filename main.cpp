@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>       // ヘッダファイルインクルード
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 #include "const.cpp"
 #include "coordinate.cpp"
 #include "set_color.cpp"
@@ -19,35 +21,49 @@ char WindowTitle[] = "Traffic_simulator";  //ウィンドウのタイトル
 vector<Car*> cars;
 TrafficSignal* traffic_signal;
 int count = 0;
+int vehicle_count = 0;
+bool signal_use = false;  //信号を使う特はtrueにする 読み込みファイルの変更忘れずに
 
 void Definition_Road(){
-  Road(50, new Coordinate(-1.0,0), new Coordinate(1.0,0));
-  Road(50, new Coordinate(0,-1.0), new Coordinate(0,1.0));
+  Road(30, new Coordinate(-1.0,0), new Coordinate(1.0,0));
+  if (signal_use) {
+    Road(30, new Coordinate(0,-1.0), new Coordinate(0,1.0));
+  }
 }
 
 void Definition_Signal(){
   extern TrafficSignal* traffic_signal;
-  traffic_signal = new TrafficSignal(40,15,15,2,3,new Coordinate(0,0),0.1,0.1);
+  traffic_signal = new TrafficSignal(70,30,30,2,3,new Coordinate(0,0),0.04,0.06);
 }
 
 void Definition_Cars(){
   ifstream ifs("car_data.csv");
   string str;
+  bool is_first_data = true;
   if(ifs.fail()) {
 		exit(0);
 	}
   while(getline(ifs, str)) {
     int id;
-    float start_position_x,start_position_y,start_speed;
+    double start_position_x,start_position_y,start_speed;
     char direction;
-		sscanf(str.data(), "%i,%f,%f,%f,%c",&id, &start_position_x, &start_position_y, &start_speed, &direction);
-    cars.push_back(new Car(id, new Coordinate(start_position_x,start_position_y), new Velocity(start_speed / Const::scale, direction)));
+    srand(time(NULL));
+    if (str[0] == ',') {
+      break;
+    } else if (is_first_data) {
+      is_first_data = false;
+      continue;
+    }
+		sscanf(str.data(), "%i,%lf,%lf,%lf,%c",&id, &start_position_x, &start_position_y, &start_speed, &direction);
+    cars.push_back(new Car(id, new Coordinate(start_position_x,start_position_y), new Velocity(start_speed / Const::scale, direction), Const::base_max_speed + Const::optinal_max_speed * (double)rand()/RAND_MAX));
 	}
 }
 
 void Definition_Content(void) {
   Definition_Road();
-  Definition_Signal();
+  if (signal_use) {
+    Definition_Signal();
+  }
   Definition_Cars();
   glutSwapBuffers();
 }
@@ -61,10 +77,14 @@ void Run_Car(){
 
 void Display_Content(void) {
   Run_Car();
-  extern TrafficSignal* traffic_signal;
-  traffic_signal->Change(count * Const::dt);
+  if (signal_use) {
+    extern TrafficSignal* traffic_signal;
+    traffic_signal->Change(count * Const::dt);
+  }
   count++;
-  std::cout << count <<std::endl;
+  if (count == 3000) {
+    glutIdleFunc(NULL);
+  }
   glutSwapBuffers();
 }
 

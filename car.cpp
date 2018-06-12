@@ -1,47 +1,59 @@
 #include "car.h"
 #include <vector>       // ヘッダファイルインクルード
+#include <cmath>
 using namespace std;
 
 extern vector<Car*> cars;
 extern TrafficSignal* traffic_signal;
+extern int vehicle_count;
+extern bool signal_use;
 
-Car::Car(int init_id, Coordinate* init_position, Velocity* init_velocity) : id(init_id), position(init_position), velocity(init_velocity)
+Car::Car(int init_id, Coordinate* init_position, Velocity* init_velocity, double init_max_speed) :
+id(init_id), position(init_position), velocity(init_velocity), max_speed(init_max_speed)
+// 0.54 * init_max_speed + 0.125712 * init_max_speed * init_max_speed
 {
-  set_vehicular_gap();
+  srand(time(NULL));
+  safety_distance = init_max_speed * 3.6 - 15; //(0.15 * init_max_speed + 0.0097 * init_max_speed * init_max_speed) * (1 + (double)rand()/RAND_MAX);
   display();
 }
 
 Car::~Car(){
 }
 
-void Car::set_vehicular_gap(){
-  vehicular_gap = pow(10, 3);
+double Car::vehicular_gap(){
+  double vehicular_gap = pow(10, 3);
+  if (signal_use) {
+    vehicular_gap = min(1000.0, to_line_distance());
+  }
   for(int i = 0; i < cars.size(); i++) {
     if (exist_former_car(cars[i])) {
-      vehicular_gap = min(vehicular_gap, min(Coordinate::distance(cars[i]->position, this->position) * Const::scale, to_line_distance()));
+      vehicular_gap = min(vehicular_gap, Coordinate::distance(cars[i]->position, this->position) * Const::scale);
+    } else {
+      vehicular_gap = min(vehicular_gap, (2 - Coordinate::distance(cars[i]->position, this->position)) * Const::scale);
     }
   }
+  return vehicular_gap;
 }
 
-float Car::to_line_distance(){
+double Car::to_line_distance(){
   switch(velocity->get_direction()){
   case 'E':
-    if (traffic_signal->get_EW_color() == 'R') {
+    if (traffic_signal->get_EW_color() == 'R' && position->get_x() < traffic_signal->E_line_position->get_x()) {
       return Coordinate::distance(position, traffic_signal->E_line_position) * Const::scale;
     }
     return pow(10, 3);
   case 'W':
-    if (traffic_signal->get_EW_color() == 'R') {
+    if (traffic_signal->get_EW_color() == 'R' && position->get_x() > traffic_signal->W_line_position->get_x()) {
       return Coordinate::distance(position, traffic_signal->W_line_position) * Const::scale;
     }
     return pow(10, 3);
   case 'N':
-    if (traffic_signal->get_NS_color() == 'R') {
+    if (traffic_signal->get_NS_color() == 'R' && position->get_y() < traffic_signal->N_line_position->get_y()) {
       return Coordinate::distance(position, traffic_signal->N_line_position) * Const::scale;
     }
     return pow(10, 3);
   case 'S':
-    if (traffic_signal->get_NS_color() == 'R') {
+    if (traffic_signal->get_NS_color() == 'R' && position->get_y() > traffic_signal->S_line_position->get_y()) {
       return Coordinate::distance(position, traffic_signal->S_line_position) * Const::scale;
     }
     return pow(10, 3);
@@ -68,18 +80,22 @@ bool Car::is_former_position(Car* car){
 void Car::Run(){
   hide();
   accelate();
-  set_vehicular_gap();
   display();
 }
 
 void Car::accelate(){
-  velocity->set_speed(velocity->get_speed() + (Const::sensitivity * (Const::max_speed / 2 * (tanh(vehicular_gap - Const::safety_distance) + tanh(Const::safety_distance)) - velocity->get_speed() * Const::scale)) / Const::scale);
   switch(this->velocity->get_direction()){
   case 'E':
     position->set_x(position->get_x() + velocity->get_speed() * Const::dt);
     break;
   case 'W':
-    position->set_x(position->get_x() - velocity->get_speed() * Const::dt);
+    if (position->get_x() - velocity->get_speed() * Const::dt < -1.0) {
+      position->set_x(position->get_x() - velocity->get_speed() * Const::dt + 2);
+      vehicle_count++;
+      std::cout << vehicle_count <<std::endl;
+    } else {
+      position->set_x(position->get_x() - velocity->get_speed() * Const::dt);
+    }
     break;
   case 'N':
     position->set_y(position->get_y() + velocity->get_speed() * Const::dt);
@@ -88,6 +104,8 @@ void Car::accelate(){
     position->set_y(position->get_y() - velocity->get_speed() * Const::dt);
     break;
   }
+  velocity->set_speed(velocity->get_speed() + (Const::sensitivity * (max_speed / 2 * (std::tanh(vehicular_gap() - safety_distance) + std::tanh(safety_distance)) - velocity->get_speed() * Const::scale)) / Const::scale);
+  safety_distance = max(velocity->get_speed() * Const::scale * 2,5.0);
 }
 
 void Car::display(){
